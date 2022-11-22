@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_house_app/pages/home_page.dart';
 import 'package:flutter_project_house_app/theme.dart';
 
 class SplashPage extends StatelessWidget {
@@ -43,7 +44,13 @@ class SplashPage extends StatelessWidget {
                       height: 50,
                       width: 210,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          // todo push ke home page
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const HomePage()));
+                        },
                         style: ButtonStyle(
                           backgroundColor:
                               MaterialStatePropertyAll(purpleColor),
