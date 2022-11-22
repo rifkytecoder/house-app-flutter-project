@@ -27,7 +27,7 @@ class CityCard extends StatelessWidget {
                   width: 120,
                   fit: BoxFit.cover,
                 ),
-                // todo badges star popular
+                // todo label star popular
                 city.isPopular
                     ? Align(
                         alignment: Alignment.topRight,
