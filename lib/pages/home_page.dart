@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_project_house_app/models/city_model.dart';
 import 'package:flutter_project_house_app/models/space_model.dart';
+import 'package:flutter_project_house_app/models/tips_model.dart';
 import 'package:flutter_project_house_app/theme.dart';
 import 'package:flutter_project_house_app/widgets/city_card.dart';
 import 'package:flutter_project_house_app/widgets/space_card.dart';
+
+import '../widgets/tips_card.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -130,7 +133,36 @@ class HomePage extends StatelessWidget {
                       // SpaceCard(),
                     ],
                   ),
-                )
+                ),
+
+                // TODO: TIPS & GUIDANCE
+                Padding(
+                  padding: EdgeInsets.only(left: edge),
+                  child: Text(
+                    'Tips & Guidance',
+                    style: regularTextStyle.copyWith(fontSize: 16),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: edge),
+                  child: Column(
+                    children: <Widget>[
+                      TipsCard(TipsModel(
+                          id: 1,
+                          title: 'City Guidelines',
+                          imageUrl: 'assets/tips_icon.png',
+                          updateAt: 'Updated 28 April')),
+                      const SizedBox(height: 20),
+                      TipsCard(TipsModel(
+                          id: 2,
+                          title: 'Manado Fairship',
+                          imageUrl: 'assets/tips_icon.png',
+                          updateAt: 'Updated 28 April')),
+                      // const TipsCard(),
+                    ],
+                  ),
+                ),
               ],
             ),
           )),
