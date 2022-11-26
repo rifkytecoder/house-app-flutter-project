@@ -1,12 +1,33 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_house_app/pages/error_page.dart';
 import 'package:flutter_project_house_app/theme.dart';
 import 'package:flutter_project_house_app/widgets/facility_item.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
-
   @override
   Widget build(BuildContext context) {
+    // bool isLauncher = true;
+    // Web launch URL
+    Future<void> _launchUrl(Uri url) async {
+      if (!await launchUrl(url)) {
+        // throw 'Could not launch $url';
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ErrorPage()),
+        );
+      }
+    }
+
+    // Phone launch
+    Future<void> _makePhoneCall(String phoneNumber) async {
+      final Uri launchUri = Uri(
+        scheme: 'tel',
+        path: phoneNumber,
+      );
+      await launchUrl(launchUri);
+    }
+
     return Scaffold(
       backgroundColor: whiteColor,
       body: SafeArea(
@@ -226,11 +247,41 @@ class DetailPage extends StatelessWidget {
                               style: greyTextStyle,
                             ),
                             IconButton(
-                                onPressed: () {},
+                                // onPressed: () => _launchUrl(
+                                //     Uri.parse('https://flutter.dev')),
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ErrorPage()),
+                                  );
+                                },
                                 icon: Icon(
-                                  Icons.location_on_sharp,
+                                  Icons.location_on,
                                   color: greyColor,
                                 ))
+                            // isLauncher
+                            //     ? IconButton(
+                            //         onPressed: () {
+                            //           _launchUrl(
+                            //               Uri.parse('https://flutter.dev'));
+                            //         },
+                            //         icon: Icon(
+                            //           Icons.location_on_sharp,
+                            //           color: greyColor,
+                            //         ))
+                            //     : IconButton(
+                            //         onPressed: () {
+                            //           print('error page');
+                            //           Navigator.push(
+                            //             context,
+                            //             MaterialPageRoute(
+                            //                 builder: (context) =>
+                            //                     const ErrorPage()),
+                            //           );
+                            //         },
+                            //         icon: const Icon(Icons.error)),
                           ],
                         ),
                       ),
@@ -243,15 +294,18 @@ class DetailPage extends StatelessWidget {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(17),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              _makePhoneCall('+6281334405540');
+                            },
                             style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStatePropertyAll(purpleColor)),
-                            child: Text('Booking Now',
-                                style: whiteTextStyle.copyWith(fontSize: 18)),
+                              backgroundColor:
+                                  MaterialStatePropertyAll(purpleColor),
+                            ),
+                            child: const Text('Booking Now'),
                           ),
                         ),
                       ),
+
                       const SizedBox(height: 40),
                     ],
                   ),

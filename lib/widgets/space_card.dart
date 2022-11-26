@@ -14,8 +14,8 @@ class SpaceCard extends StatelessWidget {
     // TODO: InkWell Response Touch
     return InkWell(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const DetailPage()));
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => DetailPage()));
       },
       child: Row(
         children: [
