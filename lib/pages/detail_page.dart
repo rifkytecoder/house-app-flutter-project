@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_house_app/models/space_model.dart';
 import 'package:flutter_project_house_app/pages/error_page.dart';
 import 'package:flutter_project_house_app/theme.dart';
 import 'package:flutter_project_house_app/widgets/facility_item.dart';
+import 'package:flutter_project_house_app/widgets/rating_item.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatelessWidget {
+  // todo create Instance/obj model
+  final SpaceModel space;
+
+  const DetailPage(this.space); // constructor
+
   @override
   Widget build(BuildContext context) {
     // bool isLauncher = true;
@@ -22,7 +29,8 @@ class DetailPage extends StatelessWidget {
     // Phone launch
     Future<void> _makePhoneCall(String phoneNumber) async {
       final Uri launchUri = Uri(
-        scheme: 'tel',
+        // scheme: 'tel',
+        scheme: space.phone,
         path: phoneNumber,
       );
       await launchUrl(launchUri);
@@ -34,8 +42,9 @@ class DetailPage extends StatelessWidget {
         bottom: false,
         child: Stack(
           children: [
-            Image.asset(
-              'assets/thumbnail.png',
+            Image.network(
+              // 'assets/thumbnail.png', // before call model/static design
+              space.imageUrl, // after call model
               width: MediaQuery.of(context).size.width,
               height: 350,
               fit: BoxFit.cover,
@@ -66,12 +75,14 @@ class DetailPage extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Green Kawanua',
+                                  // 'Green Kawanua',
+                                  space.name,
                                   style: blackTextStyle.copyWith(fontSize: 22),
                                 ),
                                 const SizedBox(height: 2),
                                 Text.rich(TextSpan(
-                                    text: '\$45',
+                                    // text: '\$45',
+                                    text: '\$${space.price}',
                                     style:
                                         purpleTextStyle.copyWith(fontSize: 16),
                                     children: [
@@ -83,35 +94,48 @@ class DetailPage extends StatelessWidget {
                                     ]))
                               ],
                             ),
+                            // TODO: Rating star
+                            // LIST Rating Star
                             Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.star_rate_rounded,
-                                  color: Colors.amber[700],
-                                ),
-                                const SizedBox(width: 2),
-                                Icon(
-                                  Icons.star_rate_rounded,
-                                  color: Colors.amber[700],
-                                ),
-                                const SizedBox(width: 2),
-                                Icon(
-                                  Icons.star_rate_rounded,
-                                  color: Colors.amber[700],
-                                ),
-                                const SizedBox(width: 2),
-                                Icon(
-                                  Icons.star_rate_rounded,
-                                  color: Colors.amber[700],
-                                ),
-                                const SizedBox(width: 2),
-                                Icon(
-                                  Icons.star_rate_rounded,
-                                  color: Colors.grey[400],
-                                ),
-                                const SizedBox(width: 2),
-                              ],
+                              children: [1, 2, 3, 4, 5].map((index) {
+                                return Container(
+                                  margin: const EdgeInsets.only(left: 2),
+                                  child: RatingItem(
+                                    index: index,
+                                    rating: space.rating,
+                                  ),
+                                );
+                              }).toList(),
                             )
+                            // Row(
+                            //   children: <Widget>[
+                            //     Icon(
+                            //       Icons.star_rate_rounded,
+                            //       color: Colors.amber[700],
+                            //     ),
+                            //     const SizedBox(width: 2),
+                            //     Icon(
+                            //       Icons.star_rate_rounded,
+                            //       color: Colors.amber[700],
+                            //     ),
+                            //     const SizedBox(width: 2),
+                            //     Icon(
+                            //       Icons.star_rate_rounded,
+                            //       color: Colors.amber[700],
+                            //     ),
+                            //     const SizedBox(width: 2),
+                            //     Icon(
+                            //       Icons.star_rate_rounded,
+                            //       color: Colors.amber[700],
+                            //     ),
+                            //     const SizedBox(width: 2),
+                            //     Icon(
+                            //       Icons.star_rate_rounded,
+                            //       color: Colors.grey[400],
+                            //     ),
+                            //     const SizedBox(width: 2),
+                            //   ],
+                            // )
                           ],
                         ),
                       ),
@@ -131,19 +155,20 @@ class DetailPage extends StatelessWidget {
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const <Widget>[
+                          children: <Widget>[
                             FacilityItem(
                                 name: 'Kitchen',
                                 imageUrl: 'assets/kitchen_icon.png',
-                                total: 2),
+                                // total: 2),
+                                total: space.numberOfKitchens),
                             FacilityItem(
                                 name: 'Bedroom',
                                 imageUrl: 'assets/bedroom_icon.png',
-                                total: 3),
+                                total: space.numberOfBedrooms),
                             FacilityItem(
                                 name: 'Big lemari',
                                 imageUrl: 'assets/lemari_icon.png',
-                                total: 3),
+                                total: space.numberOfCupboards),
                             // FacilityItem(),
                             // FacilityItem(),
                           ],
@@ -159,73 +184,88 @@ class DetailPage extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 12),
+                      // LIST PHOTOS
                       SizedBox(
                         height: 88,
                         child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: [
-                            SizedBox(width: edge),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.asset(
-                                'assets/photo_1.png',
-                                height: 110,
-                                width: 88,
-                                fit: BoxFit.cover,
-                              ),
+                            scrollDirection: Axis.horizontal,
+                            children: space.photos.map((item) {
+                              return Container(
+                                margin: const EdgeInsets.only(left: 24),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(16),
+                                  child: Image.network(
+                                    item,
+                                    height: 110,
+                                    width: 88,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              );
+                            }).toList()
+                            // [
+                            //   SizedBox(width: edge),
+                            //   ClipRRect(
+                            //     borderRadius: BorderRadius.circular(16),
+                            //     child: Image.asset(
+                            //       'assets/photo_1.png',
+                            //       height: 110,
+                            //       width: 88,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //   ),
+                            //   const SizedBox(width: 18),
+                            //   ClipRRect(
+                            //     borderRadius: BorderRadius.circular(16),
+                            //     child: Image.asset(
+                            //       'assets/photo_1.png',
+                            //       height: 110,
+                            //       width: 88,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //   ),
+                            //   const SizedBox(width: 18),
+                            //   ClipRRect(
+                            //     borderRadius: BorderRadius.circular(16),
+                            //     child: Image.asset(
+                            //       'assets/photo_1.png',
+                            //       height: 110,
+                            //       width: 88,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //   ),
+                            //   const SizedBox(width: 18),
+                            //   ClipRRect(
+                            //     borderRadius: BorderRadius.circular(16),
+                            //     child: Image.asset(
+                            //       'assets/photo_1.png',
+                            //       height: 110,
+                            //       width: 88,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //   ),
+                            //   const SizedBox(width: 18),
+                            //   ClipRRect(
+                            //     borderRadius: BorderRadius.circular(16),
+                            //     child: Image.asset(
+                            //       'assets/photo_1.png',
+                            //       height: 110,
+                            //       width: 88,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //   ),
+                            //   const SizedBox(width: 18),
+                            //   ClipRRect(
+                            //     borderRadius: BorderRadius.circular(16),
+                            //     child: Image.asset(
+                            //       'assets/photo_1.png',
+                            //       height: 110,
+                            //       width: 88,
+                            //       fit: BoxFit.cover,
+                            //     ),
+                            //   ),
+                            // ],
                             ),
-                            const SizedBox(width: 18),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.asset(
-                                'assets/photo_1.png',
-                                height: 110,
-                                width: 88,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const SizedBox(width: 18),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.asset(
-                                'assets/photo_1.png',
-                                height: 110,
-                                width: 88,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const SizedBox(width: 18),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.asset(
-                                'assets/photo_1.png',
-                                height: 110,
-                                width: 88,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const SizedBox(width: 18),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.asset(
-                                'assets/photo_1.png',
-                                height: 110,
-                                width: 88,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            const SizedBox(width: 18),
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: Image.asset(
-                                'assets/photo_1.png',
-                                height: 110,
-                                width: 88,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                          ],
-                        ),
                       ),
                       const SizedBox(height: 30),
                       // TODO: LOCATION
@@ -243,12 +283,15 @@ class DetailPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Jln, Lapangan, Paniki \nManado',
+                              // 'Jln, Lapangan, Paniki \nManado',
+                              '${space.address}\n${space.city}',
                               style: greyTextStyle,
                             ),
+                            // todo url map location(google map)
                             IconButton(
                                 // onPressed: () => _launchUrl(
                                 //     Uri.parse('https://flutter.dev')),
+                                // onPressed: () => _launchUrl(Uri.parse(space.mapUrl));
                                 onPressed: () {
                                   Navigator.push(
                                     context,
@@ -295,7 +338,8 @@ class DetailPage extends StatelessWidget {
                           borderRadius: BorderRadius.circular(17),
                           child: ElevatedButton(
                             onPressed: () {
-                              _makePhoneCall('+6281334405540');
+                              // _makePhoneCall('+6281334405540');
+                              _makePhoneCall(space.phone);
                             },
                             style: ButtonStyle(
                               backgroundColor:

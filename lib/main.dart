@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_project_house_app/providers/space_provider.dart';
+import 'package:provider/provider.dart';
 
-import 'pages/error_page.dart';
+import 'pages/splash_page.dart';
 
 void main() => runApp(const MyApp());
 
@@ -9,10 +11,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      // home: SplashPage(),
-      home: ErrorPage(),
-    );
+    return ChangeNotifierProvider(
+        create: (context) => SpaceProvider(),
+        child: const MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: SplashPage(),
+          // home: ErrorPage(),
+        ));
   }
 }

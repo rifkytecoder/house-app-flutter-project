@@ -5,6 +5,7 @@ import 'package:flutter_project_house_app/pages/detail_page.dart';
 import '../theme.dart';
 
 class SpaceCard extends StatelessWidget {
+  // todo Instance/obj model
   final SpaceModel space;
 
   const SpaceCard(this.space);
@@ -14,8 +15,8 @@ class SpaceCard extends StatelessWidget {
     // TODO: InkWell Response Touch
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DetailPage()));
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => DetailPage(space)));
       },
       child: Row(
         children: [
@@ -26,7 +27,13 @@ class SpaceCard extends StatelessWidget {
               width: 130,
               child: Stack(
                 children: [
-                  Image.asset('assets/space_room_image.png'),
+                  // Image.asset('assets/space_room_image.png'), // before call model
+                  Image.network(
+                    space.imageUrl,
+                    height: 110,
+                    width: 130,
+                    fit: BoxFit.cover,
+                  ), // after call model
                   Align(
                     alignment: Alignment.topRight,
                     child: Container(
